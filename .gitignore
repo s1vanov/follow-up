@@ -1,0 +1,10 @@
+# Персональні дані — лишаються тільки локально
+references/roster.md
+
+# Робочі нотатки
+NOTES.md
+
+# Сміття macOS та Python
+.DS_Store
+__pycache__/
+*.pyc
