@@ -1,16 +1,19 @@
 #!/usr/bin/env python3
-"""Самоперевірка scripts/check_docs.py.
+"""Self-test for scripts/check_docs.py.
 
-Вводить кожен вид дрейфу окремо в свіжу копію репозиторію й вимагає, щоб чекер
-на ньому впав. Контрольна копія без дефектів має пройти. Чекер, який мовчки
-перестав перевіряти, виглядає так само зелено, як справний, — цей скрипт і є
-різницею між ними.
+Introduces each kind of drift into its own fresh copy of the repository and
+requires the checker to fail there. The control copy, with no defects, has to
+pass. A checker that silently stopped checking looks exactly as green as a working
+one, and this script is the difference between the two.
 
-Копії створюються в новій тимчасовій теці й НЕ прибираються за собою: крок,
-який навмисно щось ламає, не повинен ще й видаляти теки — так він упирається в
-захисти середовища й тихо випадає з процесу.
+The copies are made in a new temporary directory and are NOT cleaned up: a step
+that breaks things on purpose should not also be deleting directories, or it runs
+into the environment guards and quietly drops out of the process.
 
-Запуск: python3 scripts/selftest_checks.py
+The Ukrainian strings below are anchors matched against the Ukrainian source
+files. They are data, not messages.
+
+Run: python3 scripts/selftest_checks.py
 """
 import re
 import shutil
@@ -22,18 +25,18 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 IGNORE = shutil.ignore_patterns(".git", "roster.md", "__pycache__", "*.pyc")
 
-# Підроблена адреса збирається з частин: інакше цей файл спіймався б власною
-# перевіркою на контакти.
+# The fake address is assembled from pieces, or this file would be caught by the
+# contact check itself.
 FAKE_EMAIL = "someone" + chr(64) + "example.com"
 
 
 def mutate_file(case_dir: Path, rel: str, old: str, new: str, expect: int = 1) -> None:
-    """expect=1 — шаблон має бути унікальним; expect=0 — замінити всі входження."""
+    """expect=1: the anchor must be unique. expect=0: replace every occurrence."""
     p = case_dir / rel
     text = p.read_text(encoding="utf-8")
     found = text.count(old)
     if found == 0 or (expect == 1 and found != 1):
-        raise SystemExit(f"[{rel}] шаблон дрейфу не знайдено або не унікальний: {old!r}")
+        raise SystemExit(f"[{rel}] drift anchor missing or not unique: {old!r}")
     p.write_text(text.replace(old, new), encoding="utf-8")
 
 
@@ -72,6 +75,10 @@ def drift_tracked_roster(d: Path) -> None:
     subprocess.run(["git", "add", "-f", "references/roster.md"], cwd=d, check=True)
 
 
+def drift_translation(d: Path) -> None:
+    mutate_file(d, "references/SKILL.en.md", "## Wording style", "Wording style")
+
+
 def drift_contact(d: Path) -> None:
     p = d / "README.md"
     p.write_text(p.read_text(encoding="utf-8").replace(
@@ -79,14 +86,15 @@ def drift_contact(d: Path) -> None:
 
 
 CASES = [
-    ("режим без розділу", drift_missing_section),
-    ("frontmatter без режиму", drift_frontmatter),
-    ("переклад назв блоків відстає", drift_translations),
-    ("посилання на відсутній файл", drift_missing_file),
-    ("розрив нумерації чеклісту", drift_numbering),
-    ("README розійшлись", drift_readme_parity),
-    ("ростер під версійним контролем", drift_tracked_roster),
-    ("контакт у документації", drift_contact),
+    ("mode without a section", drift_missing_section),
+    ("frontmatter missing a mode", drift_frontmatter),
+    ("block labels lagging in one language", drift_translations),
+    ("reference to a missing file", drift_missing_file),
+    ("broken self-check numbering", drift_numbering),
+    ("READMEs out of sync", drift_readme_parity),
+    ("roster under version control", drift_tracked_roster),
+    ("contact in the documentation", drift_contact),
+    ("skill translation lagging", drift_translation),
 ]
 
 
@@ -99,7 +107,7 @@ def run_checker(case_dir: Path) -> tuple[int, str]:
 
 def main() -> int:
     base = Path(tempfile.mkdtemp(prefix="afu-selftest-"))
-    print(f"копії для перевірки: {base}\n")
+    print(f"copies under test: {base}\n")
     failures = 0
 
     for i, (name, drift) in enumerate(CASES, 1):
@@ -109,20 +117,20 @@ def main() -> int:
         code, line = run_checker(d)
         caught = code != 0
         failures += 0 if caught else 1
-        print(f"{'ловить' if caught else 'ПРОПУСТИВ':10} | {name:32} | rc={code} | {line}")
+        print(f"{'caught' if caught else 'MISSED':10} | {name:34} | rc={code} | {line}")
 
     control = base / "control"
     shutil.copytree(ROOT, control, ignore=IGNORE)
     code, line = run_checker(control)
     if code != 0:
         failures += 1
-    print(f"{'ок' if code == 0 else 'ПРОВАЛ':10} | {'контроль без дефектів':32} | rc={code} | {line}")
+    print(f"{'ok' if code == 0 else 'FAILED':10} | {'control, no defects':34} | rc={code} | {line}")
 
     print()
     if failures:
-        print(f"{failures} перевірок(ки) не спрацювали — чекер осліп")
+        print(f"{failures} check(s) did not fire: the checker has gone blind")
         return 1
-    print(f"усі {len(CASES)} видів дрейфу спіймані, контроль чистий")
+    print(f"all {len(CASES)} kinds of drift caught, control clean")
     return 0
 
 

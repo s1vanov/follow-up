@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""Перевірка узгодженості документації follow-up.
+"""Documentation consistency check for the follow-up skill.
 
-Витягає факти з SKILL.md і падає, коли документація їм суперечить.
-Запуск: python3 scripts/check_docs.py
+Pulls facts out of SKILL.md and fails when the documentation contradicts them.
+Run: python3 scripts/check_docs.py
+
+The Ukrainian strings below are search patterns matched against SKILL.md, which
+is written in Ukrainian. They are data, not messages: do not translate them.
 """
 import re
 import subprocess
@@ -15,13 +18,13 @@ READMES = [ROOT / "README.md", ROOT / "README.en.md"]
 
 errors: list[str] = []
 
-# Контакти, свідомо залишені в публічній версії. Кожен рядок — з поміткою, хто
-# і коли це підтвердив. Порожній список означає: контактів у репозиторії немає.
+# Contacts deliberately kept in the public version. Every entry carries a note on
+# who approved it and when. An empty set means the repository holds no contacts.
 ALLOWED_CONTACTS: set[str] = set()
 
 
 def tracked_files() -> list[str]:
-    """Файли під версійним контролем; поза git-репозиторієм — усі текстові."""
+    """Files under version control; outside a git repository, every text file."""
     try:
         out = subprocess.run(["git", "ls-files"], cwd=ROOT,
                              capture_output=True, text=True)
@@ -39,11 +42,11 @@ def fail(msg: str) -> None:
 
 
 def section(text: str, title: str) -> str:
-    """Тіло розділу від його заголовка до наступного того ж рівня."""
+    """The body of a section, from its heading to the next one of the same level."""
     level = title.count("#")
     m = re.search(rf"(?m)^{re.escape(title)}\s*$", text)
     if not m:
-        fail(f"немає розділу «{title}» у SKILL.md")
+        fail(f"SKILL.md has no section {title!r}")
         return ""
     rest = text[m.end():]
     nxt = re.search(rf"(?m)^#{{1,{level}}} ", rest)
@@ -53,7 +56,7 @@ def section(text: str, title: str) -> str:
 def main() -> int:
     skill = SKILL.read_text(encoding="utf-8")
 
-    # 1. Кожен режим із Кроку 0 має власний розділ у «Режими виходу».
+    # 1. Every mode named in Step 0 has its own section under output modes.
     step0 = section(skill, "### Крок 0. Запитай формат перед стартом")
     modes = {re.sub(r"\s*\(рекомендовано\)", "", m).strip()
              for m in re.findall(r"\*\*(.+?)\*\*", step0)}
@@ -63,71 +66,71 @@ def main() -> int:
     declared = set(re.findall(r"(?m)^### (.+?)\s*$", out_modes))
     for m in sorted(modes):
         if m not in declared:
-            fail(f"режим «{m}» названий у Кроці 0, але не описаний у «Режими виходу»")
+            fail(f"mode {m!r} is named in Step 0 but has no section under output modes")
 
-    # 2. Опис у frontmatter згадує кожен режим (за ключовим словом).
+    # 2. The frontmatter description mentions every mode, by keyword.
     desc = skill.split("---", 2)[1]
     keywords = ["проблеми та рішення", "задачі по виконавцях", "технічні деталі",
                 "ретро", "деталі по одній темі", "повідомлення учаснику"]
     for kw in keywords:
         if kw not in desc.lower():
-            fail(f"frontmatter description не згадує режим «{kw}»")
+            fail(f"the frontmatter description does not mention the mode {kw!r}")
 
-    # 3. Назви блоків перекладені однаково повно в усіх мовах.
+    # 3. Block labels are translated equally fully into every language.
     tpl = re.search(r"(?s)Шаблон:\s*```(.+?)```", skill)
     if not tpl:
-        fail("не знайдено блок «Шаблон:» у SKILL.md")
+        fail("the template block was not found in SKILL.md")
         expected = 0
     else:
         ua = re.findall(r"(?m)^([А-ЯІЇЄҐ][^:\n]*):", tpl.group(1))
-        expected = len(set(ua)) + 1  # + умовний рядок «Увага:»
+        expected = len(set(ua)) + 1  # plus the conditional note line
     for lang in ("Англійська", "Російська", "Польська"):
         line = re.search(rf"(?m)^- {lang}: (`[^\n]+)$", skill)
         if not line:
-            fail(f"немає рядка перекладу назв блоків для мови «{lang}»")
+            fail(f"no block-label translation line for {lang!r}")
             continue
         n = len(re.findall(r"`[^`]+:`", line.group(1)))
         if n != expected:
-            fail(f"{lang}: {n} перекладених назв блоків, очікується {expected}")
+            fail(f"{lang}: {n} translated block labels, expected {expected}")
 
-    # 4. Кожен файл, названий у SKILL.md, існує (або має .example-двійника).
+    # 4. Every file named in SKILL.md exists, or has an .example twin.
     for ref in sorted(set(re.findall(r"`(references/[\w./-]+)`", skill))):
         p = ROOT / ref
         example = p.with_name(p.stem + ".example" + p.suffix)
         if not p.exists() and not example.exists():
-            fail(f"SKILL.md посилається на {ref}, якого немає в репозиторії")
+            fail(f"SKILL.md references {ref}, which is missing from the repository")
 
-    # 5. Чекліст самоперевірки пронумерований суцільно.
+    # 5. The self-check list is numbered without gaps.
     chk = re.search(r"(?s)\*\*Самоперевірка перед видачею.*?\n\n(.+?)\n\n[А-ЯA-Z#]", skill)
     if chk:
         nums = [int(x) for x in re.findall(r"(?m)^(\d+)\. ", chk.group(1))]
         if nums != list(range(1, len(nums) + 1)):
-            fail(f"нумерація чеклісту самоперевірки розірвана: {nums}")
+            fail(f"the self-check list numbering is broken: {nums}")
     else:
-        fail("не знайдено чекліст самоперевірки")
+        fail("the self-check list was not found")
 
-    # 6. Двомовні README мають однакову кількість розділів.
+    # 6. The two READMEs have the same number of sections.
     counts = {p.name: len(re.findall(r"(?m)^## ", p.read_text(encoding="utf-8")))
               for p in READMES if p.exists()}
     if len(counts) != len(READMES):
-        fail(f"бракує одного з README: знайдено {sorted(counts)}")
+        fail(f"one README is missing: found {sorted(counts)}")
     elif len(set(counts.values())) != 1:
-        fail(f"README розійшлись у структурі: {counts}")
+        fail(f"the READMEs drifted apart in structure: {counts}")
 
-    # 7. Персональний ростер не потрапив під версійний контроль.
+    # 7. The personal roster did not slip under version control.
     try:
         tracked = subprocess.run(["git", "ls-files", "*roster.md"],
                                  cwd=ROOT, capture_output=True, text=True).stdout.split()
         leaked = [f for f in tracked if not f.endswith(".example.md")]
         for f in leaked:
-            fail(f"{f} відстежується git — це персональні дані")
+            fail(f"{f} is tracked by git and holds personal data")
     except FileNotFoundError:
         pass
 
-    # 8. Жодних контактних каналів у відстежуваних файлах.
-    # Патерн збирається з частин навмисно: інакше цей файл спіймав би сам себе.
+    # 8. No contact channels in tracked files. The pattern is assembled from
+    # pieces on purpose: written out whole, this file would match itself.
     at = chr(64)
-    tel = "t" + "el" + chr(58)          # інакше рядок збігся б сам із собою
+    tel = "t" + "el" + chr(58)          # kept split for the same reason
     phone = r"\+" + "38" + "0"
     contact = re.compile(
         r"[A-Za-z0-9._%+-]+" + at + r"[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
@@ -142,14 +145,27 @@ def main() -> int:
             for hit in contact.findall(line):
                 if hit in ALLOWED_CONTACTS:
                     continue
-                fail(f"{rel}:{i} містить контакт «{hit}» — див. ALLOWED_CONTACTS")
+                fail(f"{rel}:{i} contains the contact {hit!r}; see ALLOWED_CONTACTS")
+
+    # 9. The translation of the skill keeps up with the original structurally.
+    en = ROOT / "references" / "SKILL.en.md"
+    if not en.exists():
+        fail("references/SKILL.en.md is missing: the English translation")
+    else:
+        ua_h = re.findall(r"(?m)^(#{2,3}) ", skill)
+        en_h = re.findall(r"(?m)^(#{2,3}) ", en.read_text(encoding="utf-8"))
+        if len(ua_h) != len(en_h):
+            fail(f"SKILL.md has {len(ua_h)} headings, the translation has "
+                 f"{len(en_h)}: a section was added to one file and not the other")
+        elif ua_h != en_h:
+            fail("heading levels in SKILL.md and the translation diverged")
 
     for e in errors:
         print(f"FAIL: {e}")
     if errors:
-        print(f"\n{len(errors)} проблем(и) в документації")
+        print(f"\n{len(errors)} problem(s) in the documentation")
         return 1
-    print("OK: документація узгоджена")
+    print("OK: documentation is consistent")
     return 0
 
 

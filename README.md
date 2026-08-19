@@ -124,6 +124,10 @@ cp ~/.claude/skills/follow-up/references/roster.example.md ~/.claude/skills/foll
 
 Перевірка: у Claude Code наберіть `/follow-up`, скіл має зʼявитись у списку.
 
+Робочий файл скіла українською. Повний англійський переклад для читання й
+адаптації лежить у [references/SKILL.en.md](references/SKILL.en.md); CI стежить,
+щоб він не відставав структурно.
+
 ## Як користуватись
 
 Вставте транскрипцію після виклику або прикладіть файл:

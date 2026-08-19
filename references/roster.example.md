@@ -27,3 +27,16 @@
 Додавай сюди тільки тих, хто трапляється в кількох зустрічах.
 
 - John Smith | Джон Сміт | замовник, Northwind Beauty LLC | клієнт
+
+## For English readers
+
+Copy this file to `references/roster.md` and fill it with your own people. The
+real `roster.md` deliberately stays out of the repository: it holds personal
+data.
+
+Line format: `Canonical name | spellings seen in transcripts | role | side`.
+
+The side values are read by the skill in Ukrainian: `наша команда` (our team),
+`клієнт` (client), `підрядник` (contractor). If you run the skill with another
+output language, keep these values as they are, or translate them here and in
+`SKILL.md` together.

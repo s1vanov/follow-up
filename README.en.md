@@ -128,6 +128,11 @@ cp ~/.claude/skills/follow-up/references/roster.example.md ~/.claude/skills/foll
 To verify, type `/follow-up` in Claude Code and check that the skill shows up in
 the list.
 
+The working skill file is Ukrainian: that is what Claude loads. A full English
+translation for reading and adapting is in
+[references/SKILL.en.md](references/SKILL.en.md), and CI fails when the two drift
+apart in structure.
+
 ## Usage
 
 Paste the transcript after the command, or attach a file:
