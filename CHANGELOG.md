@@ -7,6 +7,12 @@
 
 ### Додано
 
+- Розділ «Сумнівні місця»: зіпсовані транскрибацією слова, які впливають на пункт,
+  більше не добудовуються правдоподібним синонімом. Дія формулюється на тому, що чути
+  напевно, а сумнів виноситься окремим блоком питань після виходу — цитата з таймкодом,
+  прочитання, питання на «так» або «ні». Дев'ятий пункт чеклісту самоперевірки це
+  перевіряє.
+
 - `references/SKILL.en.md` — повний англійський переклад скіла для читання й
   адаптації. Робочим лишається український `SKILL.md`: саме він завантажується
   в модель, тож розмір промпту не росте.
@@ -21,6 +27,12 @@
   текст для читача.
 
 ### English
+
+Added an "Uncertain passages" section: a word damaged by transcription that bears on an
+item is no longer filled in with a plausible synonym. The item is written on what is
+certainly audible, and the doubt is raised in a separate block of questions after the
+output, each with the quote and its timestamp, the reading, and a yes-or-no question. A
+ninth point in the self-check list enforces it.
 
 Added `references/SKILL.en.md`, a full English translation of the skill for
 reading and adapting. The Ukrainian `SKILL.md` stays the working file: it is the

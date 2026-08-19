@@ -321,6 +321,8 @@ the generated text again and check it point by point:
 8. The first sentence of every prose block is a fact, not a stock opener ("The
    meeting was broadly devoted to…", "It is important to note that…"). The
    stop-list is in "Wording style".
+9. Passages damaged by transcription that bear on an item are raised as a block of
+   questions after the output, not resolved by a guess inside the text.
 
 Translate the block names and the header along with the rest of the text when the
 user sets another output language:
@@ -331,6 +333,40 @@ user sets another output language:
   `Контекст:`, `Решения:`, `Действия:`, `По исполнителям:`, `Открытые вопросы:`
 - Polish: `Spotkanie:`, `Data:`, `Uczestnicy:`, `Wspomniani:`, `Uwaga:`,
   `Kontekst:`, `Decyzje:`, `Działania:`, `Wg odpowiedzialnych:`, `Pytania otwarte:`
+
+## Uncertain passages
+
+Transcription is machine-made: some of its words are damaged, and some of those carry
+meaning, such as the name of a document, an amount, a name, a deadline. Filling such a
+word in silently passes a guess off as an agreement.
+
+The rule: a doubt does not go into the follow-up and does not disappear either. It goes
+into a **separate block after the output**, into the chat, not inside the artefact. The
+artefact goes to the team or the client, where questions do not belong.
+
+What to do with an action that rests on a damaged passage:
+
+- write it on what is certainly audible and mark the unknown part `[уточнити …]`;
+- do not replace an unclear word with a plausible synonym, however well it fits the
+  neighbouring lines.
+
+The format of the block after the output. One item per doubt, in three parts: the quote
+with its timestamp as it stands in the transcript; how you read it; a question that can
+be answered yes or no.
+
+```
+Сумнівні місця:
+
+1. 13:33, Тетяна: «щоб він підготував ще Ліна чекає». Прочитав як чекліст вимог від маркетолога. Чи так?
+```
+
+Raise only what changes the meaning of an item: the action, the owner, a date, an amount,
+a name. Ignore small distortions that affect no item; a block of twenty questions goes
+unread.
+
+The same holds for doubts about applying the rules of this skill: when it is unclear where
+an item belongs or whether something counts as a decision, ask here instead of deciding in
+silence.
 
 ## Wording style
 
@@ -575,5 +611,8 @@ retell the conversation line by line: gather it by topic.
   who is the client and who is the project manager, put `[уточнити роль]`. A
   mistake here scatters the actions across the wrong people and the whole
   follow-up has to be rewritten.
+- **Do not fill in a transcription-damaged word** with a plausible synonym. Write the
+  item on what is certainly audible and raise the doubt in the block of questions after
+  the output. See "Uncertain passages".
 - **Do not write closing pleasantries** ("Thanks for the meeting, looking forward
   to confirmation!"). If a covering text is needed, the user will add it.
