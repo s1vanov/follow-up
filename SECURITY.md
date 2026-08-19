@@ -4,7 +4,7 @@
 
 ## What this skill touches
 
-`actionable-follow-up` is a prompt-level skill: a Markdown instruction file plus
+`follow-up` is a prompt-level skill: a Markdown instruction file plus
 an optional local reference file. It has no runtime, no dependencies and makes
 no network calls of its own.
 
@@ -45,7 +45,7 @@ fragment of a few lines is enough.
 
 ## Чого торкається скіл
 
-`actionable-follow-up` — це скіл рівня промпту: файл інструкцій у Markdown плюс
+`follow-up` — це скіл рівня промпту: файл інструкцій у Markdown плюс
 необовʼязковий локальний довідник. Він не має рантайму, залежностей і не робить
 жодних мережевих запитів.
 

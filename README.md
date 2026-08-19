@@ -1,8 +1,8 @@
-# actionable-follow-up
+# follow-up
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](CHANGELOG.md)
-[![Docs check](https://github.com/s1vanov/actionable-follow-up/actions/workflows/check-docs.yml/badge.svg)](https://github.com/s1vanov/actionable-follow-up/actions/workflows/check-docs.yml)
+[![Docs check](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml/badge.svg)](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml)
 
 **English version: [README.en.md](README.en.md)**
 
@@ -56,17 +56,17 @@ items. Різниця в трьох речах, і кожна коштувала
 Claude Code:
 
 ```bash
-git clone https://github.com/s1vanov/actionable-follow-up.git ~/.claude/skills/actionable-follow-up
+git clone https://github.com/s1vanov/follow-up.git ~/.claude/skills/follow-up
 ```
 
 Далі, якщо хочете надійне визначення ролей — скопіюйте ростер і впишіть свою
 команду:
 
 ```bash
-cp ~/.claude/skills/actionable-follow-up/references/roster.example.md ~/.claude/skills/actionable-follow-up/references/roster.md
+cp ~/.claude/skills/follow-up/references/roster.example.md ~/.claude/skills/follow-up/references/roster.md
 ```
 
-Перевірка: у Claude Code наберіть `/actionable-follow-up` — скіл має зʼявитись у
+Перевірка: у Claude Code наберіть `/follow-up` — скіл має зʼявитись у
 списку.
 
 ## Як користуватись
@@ -74,7 +74,7 @@ cp ~/.claude/skills/actionable-follow-up/references/roster.example.md ~/.claude/
 Вставте транскрипцію після виклику або прикладіть файл:
 
 ```
-/actionable-follow-up
+/follow-up
 ```
 
 Скіл поставить одне запитання про формат і видасть результат. Якщо формат уже

@@ -1,8 +1,8 @@
-# actionable-follow-up
+# follow-up
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
 [![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](CHANGELOG.md)
-[![Docs check](https://github.com/s1vanov/actionable-follow-up/actions/workflows/check-docs.yml/badge.svg)](https://github.com/s1vanov/actionable-follow-up/actions/workflows/check-docs.yml)
+[![Docs check](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml/badge.svg)](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml)
 
 **Українська версія: [README.md](README.md)**
 
@@ -57,16 +57,16 @@ cost a mistake on a real meeting:
 Claude Code:
 
 ```bash
-git clone https://github.com/s1vanov/actionable-follow-up.git ~/.claude/skills/actionable-follow-up
+git clone https://github.com/s1vanov/follow-up.git ~/.claude/skills/follow-up
 ```
 
 Then, for reliable role detection, copy the roster and fill in your team:
 
 ```bash
-cp ~/.claude/skills/actionable-follow-up/references/roster.example.md ~/.claude/skills/actionable-follow-up/references/roster.md
+cp ~/.claude/skills/follow-up/references/roster.example.md ~/.claude/skills/follow-up/references/roster.md
 ```
 
-To verify, type `/actionable-follow-up` in Claude Code — the skill should appear
+To verify, type `/follow-up` in Claude Code — the skill should appear
 in the list.
 
 ## Usage
@@ -74,7 +74,7 @@ in the list.
 Paste the transcript after the command, or attach a file:
 
 ```
-/actionable-follow-up
+/follow-up
 ```
 
 The skill asks one question about the format and returns the result. If you

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Перевірка узгодженості документації actionable-follow-up.
+"""Перевірка узгодженості документації follow-up.
 
 Витягає факти з SKILL.md і падає, коли документація їм суперечить.
 Запуск: python3 scripts/check_docs.py
