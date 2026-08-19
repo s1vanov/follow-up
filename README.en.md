@@ -157,7 +157,7 @@ often stay marked `[уточнити роль]`.
 
 ## Limits
 
-Tested on ten real meetings at a single agency, in Ukrainian and English, on tldv
+Tested on real meetings at a single agency, in Ukrainian and English, on tldv
 transcripts and .txt exports from recorders. Not tested in other domains such as
 healthcare, legal or public sector.
 

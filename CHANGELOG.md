@@ -90,8 +90,8 @@ SECURITY.md.
 
 ## [0.1.0] — 2026-08-19
 
-Перший публічний зріз. До цього скіл жив локально й пройшов 10 реальних
-зустрічей; усі зміни нижче зроблені за результатами розбору цих сесій.
+Перший публічний зріз. До цього скіл жив локально й пройшов реальні зустрічі;
+усі зміни нижче зроблені за результатами розбору цих сесій.
 
 ### Додано
 
@@ -117,7 +117,7 @@ SECURITY.md.
 
 ### English
 
-First public cut. Before this the skill lived locally and went through ten real
+First public cut. Before this the skill lived locally and went through real
 meetings; every change below came out of reviewing those sessions.
 
 Added: Step 0, a question about the output mode before anything is generated; six
