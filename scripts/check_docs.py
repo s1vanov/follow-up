@@ -98,10 +98,11 @@ def main() -> int:
 
     # 7. Персональний ростер не потрапив під версійний контроль.
     try:
-        tracked = subprocess.run(["git", "ls-files", "references/roster.md"],
-                                 cwd=ROOT, capture_output=True, text=True).stdout.strip()
-        if tracked:
-            fail("references/roster.md відстежується git — це персональні дані")
+        tracked = subprocess.run(["git", "ls-files", "*roster.md"],
+                                 cwd=ROOT, capture_output=True, text=True).stdout.split()
+        leaked = [f for f in tracked if not f.endswith(".example.md")]
+        for f in leaked:
+            fail(f"{f} відстежується git — це персональні дані")
     except FileNotFoundError:
         pass
 
