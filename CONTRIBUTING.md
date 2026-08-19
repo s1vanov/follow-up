@@ -24,14 +24,18 @@ English below.
 
 ```bash
 python3 scripts/check_docs.py
+python3 scripts/selftest_checks.py
 ```
 
-Той самий скрипт запускає CI. Він падає, коли SKILL.md і README розходяться:
-режим названий, але не описаний; переклад назв блоків відстає від української;
-README-и розійшлись у структурі; персональний ростер потрапив під git.
+Обидва запускає CI. Перший падає, коли SKILL.md і README розходяться: режим
+названий, але не описаний; переклад назв блоків відстає від української;
+README-и розійшлись у структурі; персональний ростер потрапив під git; у
+відстежуваному файлі зʼявився контакт.
 
-Якщо ви додали перевірку в цей скрипт — зламайте документацію навмисно й
-переконайтесь, що вона падає. Перевірка, яка мовчки перестала перевіряти, гірша
+Другий перевіряє сам чекер: вводить кожен вид дрейфу в окрему копію
+репозиторію й вимагає, щоб чекер на ній впав, а на контрольній копії — ні.
+Додали перевірку в `check_docs.py` — додайте до неї випадок у
+`scripts/selftest_checks.py`. Перевірка, яка мовчки перестала перевіряти, гірша
 за відсутню.
 
 ## Чого не робити
@@ -69,15 +73,19 @@ Check: how to see that the rule was followed
 
 ```bash
 python3 scripts/check_docs.py
+python3 scripts/selftest_checks.py
 ```
 
-CI runs the same script. It fails when SKILL.md and the READMEs drift apart: a
-mode named but not described, a block-label translation lagging behind the
-Ukrainian one, the two READMEs out of structural sync, a personal roster under
-version control.
+CI runs both. The first fails when SKILL.md and the READMEs drift apart: a mode
+named but not described, a block-label translation lagging behind the Ukrainian
+one, the two READMEs out of structural sync, a personal roster under version
+control, a contact address in a tracked file.
 
-If you add a check to that script, break the documentation on purpose and
-confirm it fails. A check that silently stopped checking is worse than none.
+The second tests the checker itself: it introduces each kind of drift into its
+own copy of the repository and requires the checker to fail there — and to pass
+on a clean control copy. If you add a check to `check_docs.py`, add its case to
+`scripts/selftest_checks.py` too. A check that silently stopped checking is
+worse than none.
 
 ## What not to do
 

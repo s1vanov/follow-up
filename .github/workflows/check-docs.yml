@@ -19,3 +19,5 @@ jobs:
           python-version: '3.11'
       - name: Check documentation consistency
         run: python3 scripts/check_docs.py
+      - name: Self-test the checker against deliberate drift
+        run: python3 scripts/selftest_checks.py

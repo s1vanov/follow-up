@@ -15,6 +15,24 @@ READMES = [ROOT / "README.md", ROOT / "README.en.md"]
 
 errors: list[str] = []
 
+# Контакти, свідомо залишені в публічній версії. Кожен рядок — з поміткою, хто
+# і коли це підтвердив. Порожній список означає: контактів у репозиторії немає.
+ALLOWED_CONTACTS: set[str] = set()
+
+
+def tracked_files() -> list[str]:
+    """Файли під версійним контролем; поза git-репозиторієм — усі текстові."""
+    try:
+        out = subprocess.run(["git", "ls-files"], cwd=ROOT,
+                             capture_output=True, text=True)
+        if out.returncode == 0 and out.stdout.strip():
+            return out.stdout.split()
+    except FileNotFoundError:
+        pass
+    return [str(p.relative_to(ROOT)) for p in ROOT.rglob("*")
+            if p.is_file() and p.suffix in {".md", ".py", ".yml", ".yaml", ".txt"}
+            and ".git" not in p.parts]
+
 
 def fail(msg: str) -> None:
     errors.append(msg)
@@ -105,6 +123,26 @@ def main() -> int:
             fail(f"{f} відстежується git — це персональні дані")
     except FileNotFoundError:
         pass
+
+    # 8. Жодних контактних каналів у відстежуваних файлах.
+    # Патерн збирається з частин навмисно: інакше цей файл спіймав би сам себе.
+    at = chr(64)
+    tel = "t" + "el" + chr(58)          # інакше рядок збігся б сам із собою
+    phone = r"\+" + "38" + "0"
+    contact = re.compile(
+        r"[A-Za-z0-9._%+-]+" + at + r"[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
+        + r"|t\.me/|wa\.me/|linkedin\.com/in/|" + tel + "|" + phone,
+        re.I,
+    )
+    for rel in tracked_files():
+        path = ROOT / rel
+        if not path.exists():
+            continue
+        for i, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
+            for hit in contact.findall(line):
+                if hit in ALLOWED_CONTACTS:
+                    continue
+                fail(f"{rel}:{i} містить контакт «{hit}» — див. ALLOWED_CONTACTS")
 
     for e in errors:
         print(f"FAIL: {e}")
