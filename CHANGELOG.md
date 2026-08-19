@@ -3,7 +3,7 @@
 Формат — [Keep a Changelog](https://keepachangelog.com/uk/1.1.0/),
 версії — [SemVer](https://semver.org/lang/uk/).
 
-## [Unreleased]
+## [0.2.0] — 2026-08-19
 
 ### Змінено — увага, ламає шлях встановлення
 

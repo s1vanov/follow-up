@@ -1,7 +1,7 @@
 # follow-up
 
 [![License: CC BY 4.0](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.1.0-orange.svg)](CHANGELOG.md)
+[![Version](https://img.shields.io/badge/version-0.2.0-orange.svg)](CHANGELOG.md)
 [![Docs check](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml/badge.svg)](https://github.com/s1vanov/follow-up/actions/workflows/check-docs.yml)
 
 **Українська версія: [README.md](README.md)**
